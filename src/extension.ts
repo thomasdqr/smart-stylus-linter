@@ -17,8 +17,8 @@ export function deactivate() { }
 const smartSort = () => {
 	const inputLines = getDocumentLines();
 	const outputLines = sortLines(inputLines);
-	ReplaceDocumentWith(outputLines)
-}
+	ReplaceDocumentWith(outputLines);
+};
 
 const getDocumentLines = () => {
 	const editor = vscode.window.activeTextEditor;
@@ -38,7 +38,7 @@ const getDocumentLines = () => {
 	}
 
 	return lines;
-}
+};
 
 const ReplaceDocumentWith = (lines: string[]) => {
 	const editor = vscode.window.activeTextEditor;
@@ -66,10 +66,40 @@ const ReplaceDocumentWith = (lines: string[]) => {
 
 	vscode.workspace.applyEdit(edit);
 	vscode.window.showInformationMessage('Stylus file sorted!');
-}
+};
 
 const sortLines = (lines: string[]) => {
 	const sortedLines: string[] = [];
+
+	let blockToSort: string[] = [];
+	for (const line of lines) {
+		if (!isSelector(line)) {
+			console.log(line, line.replace(':', ''));
+			blockToSort.push(line.replace(':', '').replace(';', ''));
+		}
+		else {
+			blockToSort = blockToSort.sort();
+			sortedLines.push(...blockToSort);
+			sortedLines.push(line);
+			blockToSort = [];
+		}
+	}
+
+	return sortedLines;
+};
+
+const startsWith = (line: string, prefixes: string[]) => {
+	for (const prefix of prefixes) {
+		const lineWithoutSpaces = line.replace(/^\s+/g, '');
+		if (lineWithoutSpaces.startsWith(prefix) || line.length === 0) {
+			return true;
+		}
+	}
+
+	return false;
+};
+
+const isSelector = (line: string) => {
 	const htmlTagSelectors = [
 		"a",
 		"abbr",
@@ -157,30 +187,23 @@ const sortLines = (lines: string[]) => {
 		"var",
 		"video",
 	];
-	const selectorsPrefixes = [...htmlTagSelectors, ".", "&", "#", ":"];
+	const pseudoSelectors = [".", "&", "#", ":"];
+	const selectorsPrefixes = [...htmlTagSelectors, ...pseudoSelectors];
 
-	let blockToSort: string[] = [];
-	for (const line of lines) {
-		if (!startsWith(line, selectorsPrefixes)) {
-			blockToSort.push(line.replace(':', '').replace(';', ''));
-		}
-		else {
-			blockToSort = blockToSort.sort();
-			sortedLines.push(...blockToSort);
-			sortedLines.push(line);
-			blockToSort = [];
+	const lineWithoutSpaces = line.replace(/^\s+/g, '');
+	let isSelector = false;
+	if (startsWith(lineWithoutSpaces, pseudoSelectors)) {
+		isSelector = true;
+	}
+	else if (startsWith(lineWithoutSpaces, selectorsPrefixes)) {
+		for(const selector of selectorsPrefixes) {
+			const lineWitoutSelector = lineWithoutSpaces.replace(selector, '');
+			if (startsWith(lineWitoutSelector, pseudoSelectors)) {
+				isSelector = true;
+				break;
+			}
 		}
 	}
 
-	return sortedLines;
-}
-
-const startsWith = (line: string, prefixes: string[]) => {
-	for (const prefix of prefixes) {
-		if (line.replace(/^\s+/g, '').startsWith(prefix) || line.length === 0) {
-			return true;
-		}
-	}
-
-	return false;
-}
+	return isSelector;
+};
