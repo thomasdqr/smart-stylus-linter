@@ -162,7 +162,7 @@ const sortLines = (lines: string[]) => {
 	let blockToSort: string[] = [];
 	for (const line of lines) {
 		if (!startsWith(line, selectorsPrefixes)) {
-			blockToSort.push(line);
+			blockToSort.push(line.replace(':', '').replace(';', ''));
 		}
 		else {
 			blockToSort = blockToSort.sort();

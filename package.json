@@ -2,13 +2,17 @@
   "name": "smart-stylus-sorter",
   "displayName": "Smart Stylus Sorter",
   "description": "Allow to auto sort stylus properties",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.82.0"
   },
   "categories": [
     "Other"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thomasdqr/smart-stylus-sorter"
+  },
   "activationEvents": [],
   "main": "./out/extension.js",
   "contributes": {
