@@ -56,7 +56,6 @@ const ReplaceDocumentWith = (lines: string[]) => {
 
 	for (let i = 0; i < lines.length; i++) {
 		const line = document.lineAt(i);
-		console.log({ line });
 		const text = lines[i] || '';
 		edit.replace(
 			document.uri,
@@ -158,7 +157,7 @@ const sortLines = (lines: string[]) => {
 		"var",
 		"video",
 	];
-	const selectorsPrefixes = [...htmlTagSelectors, ".", "&", "#"];
+	const selectorsPrefixes = [...htmlTagSelectors, ".", "&", "#", ":"];
 
 	let blockToSort: string[] = [];
 	for (const line of lines) {
