@@ -1,8 +1,10 @@
 {
-  "name": "smart-stylus-sorter",
-  "displayName": "Smart Stylus Sorter",
+  "name": "smart-stylus-linter",
+  "displayName": "Smart Stylus Linter",
   "description": "Allow to auto sort stylus properties",
-  "version": "1.0.0",
+  "version": "1.0.3",
+  "publisher": "thomasdqr",
+  "icon": "icon.png",
   "engines": {
     "vscode": "^1.82.0"
   },
@@ -18,8 +20,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "smart-stylus-sorter.smartSort",
-        "title": "Stylus Smart Sort"
+        "command": "smart-stylus-linter.smartLint",
+        "title": "Smart Stylus Linter: Auto Fix Stylus Linting"
       }
     ]
   },

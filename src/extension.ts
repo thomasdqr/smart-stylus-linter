@@ -2,10 +2,10 @@ import * as vscode from 'vscode';
 
 export function activate(context: vscode.ExtensionContext) {
 
-	console.log('Congratulations, your extension "smart-stylus-sorter" is now active!');
+	console.log('Congratulations, your extension "smart-stylus-linter" is now active!');
 
-	let disposable = vscode.commands.registerCommand('smart-stylus-sorter.smartSort', () => {
-		smartSort();
+	let disposable = vscode.commands.registerCommand('smart-stylus-linter.smartLint', () => {
+		smartLint();
 	});
 
 	context.subscriptions.push(disposable);
@@ -14,10 +14,10 @@ export function activate(context: vscode.ExtensionContext) {
 // This method is called when your extension is deactivated
 export function deactivate() { }
 
-const smartSort = () => {
+const smartLint = () => {
 	const inputLines = getDocumentLines();
 	const outputLines = sortLines(inputLines);
-	ReplaceDocumentWith(outputLines);
+	replaceDocumentWith(outputLines);
 };
 
 const getDocumentLines = () => {
@@ -40,7 +40,7 @@ const getDocumentLines = () => {
 	return lines;
 };
 
-const ReplaceDocumentWith = (lines: string[]) => {
+const replaceDocumentWith = (lines: string[]) => {
 	const editor = vscode.window.activeTextEditor;
 	if (!editor) {
 		return;
@@ -65,7 +65,7 @@ const ReplaceDocumentWith = (lines: string[]) => {
 	}
 
 	vscode.workspace.applyEdit(edit);
-	vscode.window.showInformationMessage('Stylus file sorted!');
+	vscode.window.showInformationMessage('Stylus file successfully linted!');
 };
 
 const sortLines = (lines: string[]) => {
@@ -74,7 +74,6 @@ const sortLines = (lines: string[]) => {
 	let blockToSort: string[] = [];
 	for (const line of lines) {
 		if (!isSelector(line)) {
-			console.log(line, line.replace(':', ''));
 			blockToSort.push(line.replace(':', '').replace(';', ''));
 		}
 		else {

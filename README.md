@@ -1,6 +1,6 @@
-# Smart Stylus Sorter
+# Smart Stylus Linter
 
-The Smart Stylus Sorter is a Visual Studio Code extension designed to simplify your Stylus (CSS preprocessor) coding experience. With this extension, you can effortlessly and accurately sort CSS properties within your Stylus files alphabetically. Say goodbye to manual sorting and enjoy cleaner, more organized code.
+The Smart Stylus Linter is a Visual Studio Code extension designed to simplify your Stylus (CSS preprocessor) coding experience. With this extension, you can effortlessly and accurately sort CSS properties within your Stylus files alphabetically. Say goodbye to manual sorting and enjoy cleaner, more organized code.
 
 ## Features
 
@@ -15,22 +15,14 @@ The Smart Stylus Sorter is a Visual Studio Code extension designed to simplify y
 
 1. Open Visual Studio Code.
 2. Navigate to the Extensions view by clicking on the Extensions icon in the Activity Bar on the side.
-3. Search for "Smart Stylus Sorter" and click "Install."
+3. Search for "Smart Stylus Linter" and click "Install."
 
 ### Usage
 
 1. Open a Stylus (.styl) file in Visual Studio Code.
 2. Access the Command Palette by pressing `Ctrl+Shift+P` (Windows/Linux) or `Cmd+Shift+P` (macOS).
-3. In the Command Palette, type "Stylus Smart Sort" and select it from the list of available commands.
+3. In the Command Palette, type "Auto Fix Stylus Linting" and select it from the list of available commands.
 4. Watch as your CSS properties are sorted alphabetically instantly!
-
-## Configuration
-
-You can customize the extension's behavior by modifying your Visual Studio Code settings. To do this:
-
-1. Open Visual Studio Code.
-2. Go to File > Preferences > Settings.
-3. Search for "Smart Stylus Sorter" and adjust the extension's settings to match your preferences.
 
 ## Contributing
 
@@ -38,4 +30,4 @@ Contributions to the Smart Stylus Sorter extension are welcome! If you encounter
 
 ---
 
-Happy coding with Smart Stylus Sorter! 🚀
+Happy coding with Smart Stylus Linter! 🚀
