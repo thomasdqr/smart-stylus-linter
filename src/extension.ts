@@ -1,5 +1,7 @@
 import * as vscode from 'vscode';
 
+let diagnosticCollection: vscode.DiagnosticCollection;
+
 export function activate(context: vscode.ExtensionContext) {
 
 	console.log('Congratulations, your extension "smart-stylus-linter" is now active!');
@@ -9,10 +11,76 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
+	diagnosticCollection = vscode.languages.createDiagnosticCollection('smart-stylus-linter');
+	context.subscriptions.push(diagnosticCollection);
+
+	vscode.window.onDidChangeActiveTextEditor(editor => {
+		if (editor && editor.document.languageId === 'stylus') {
+			updateDiagnostics(editor.document);
+		} else {
+			diagnosticCollection.clear();
+		}
+	});
+
+	vscode.workspace.onDidChangeTextDocument(event => {
+		if (event.document.languageId === 'stylus') {
+			updateDiagnostics(event.document);
+		} else {
+			diagnosticCollection.clear();
+		}
+	});
+
+	const editor = vscode.window.activeTextEditor;
+	if (editor && editor.document.languageId === 'stylus') {
+		updateDiagnostics(editor.document);
+	}
+
 }
 
-// This method is called when your extension is deactivated
-export function deactivate() { }
+function updateDiagnostics(document: vscode.TextDocument) {
+	if (document.languageId === 'stylus') {
+		const text = document.getText();
+		const lines = text.split('\n');
+		const diagnostics: vscode.Diagnostic[] = [];
+
+		for (let i = 0; i < lines.length; i++) {
+			const line = lines[i];
+			const previousLine = i > 0 ? lines[i - 1] : null;
+			if (line.includes(':')) {
+				const range = new vscode.Range(i, 0, i, line.length);
+				const diagnostic = new vscode.Diagnostic(
+					range,
+					'Unwanted colon found',
+					vscode.DiagnosticSeverity.Error
+				);
+				diagnostics.push(diagnostic);
+			}
+			else if (line.includes(';')) {
+				const range = new vscode.Range(i, 0, i, line.length);
+				const diagnostic = new vscode.Diagnostic(
+					range,
+					'Unwanted semicolon found',
+					vscode.DiagnosticSeverity.Error
+				);
+				diagnostics.push(diagnostic);
+			}
+			else if (!isSelector(line) && previousLine && !isSelector(previousLine) && line.localeCompare(previousLine) < 0) {
+				const range = new vscode.Range(i, 0, i, line.length);
+				const diagnostic = new vscode.Diagnostic(
+					range,
+					'Unsorted line found',
+					vscode.DiagnosticSeverity.Error
+				);
+				diagnostics.push(diagnostic);
+			}
+		}
+
+		diagnosticCollection.set(document.uri, diagnostics);
+	} else {
+		diagnosticCollection.clear();
+	}
+}
 
 const smartLint = () => {
 	const inputLines = getDocumentLines();
@@ -195,7 +263,7 @@ const isSelector = (line: string) => {
 		isSelector = true;
 	}
 	else if (startsWith(lineWithoutSpaces, selectorsPrefixes)) {
-		for(const selector of selectorsPrefixes) {
+		for (const selector of selectorsPrefixes) {
 			const lineWitoutSelector = lineWithoutSpaces.replace(selector, '');
 			if (startsWith(lineWitoutSelector, pseudoSelectors)) {
 				isSelector = true;

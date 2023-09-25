@@ -2,7 +2,7 @@
   "name": "smart-stylus-linter",
   "displayName": "Smart Stylus Linter",
   "description": "Allow to auto sort stylus properties",
-  "version": "1.0.5",
+  "version": "1.1.0",
   "publisher": "thomasdqr",
   "icon": "icon.png",
   "engines": {
@@ -15,7 +15,9 @@
     "type": "git",
     "url": "https://github.com/thomasdqr/smart-stylus-linter"
   },
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:stylus"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
