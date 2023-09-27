@@ -3,5 +3,5 @@ dist
 node_modules
 .vscode-test/
 .env
-.vsix
-.styl
+*.vsix
+*.styl
