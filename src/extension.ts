@@ -47,7 +47,7 @@ function updateDiagnostics(document: vscode.TextDocument) {
 		for (let i = 0; i < lines.length; i++) {
 			const line = lines[i];
 			const previousLine = i > 0 ? lines[i - 1] : null;
-			if (line.includes(':')) {
+			if (!isSelector(line) && line.includes(':')) {
 				const range = new vscode.Range(i, 0, i, line.length);
 				const diagnostic = new vscode.Diagnostic(
 					range,
@@ -56,7 +56,7 @@ function updateDiagnostics(document: vscode.TextDocument) {
 				);
 				diagnostics.push(diagnostic);
 			}
-			else if (line.includes(';')) {
+			else if (!isSelector(line) && line.includes(';')) {
 				const range = new vscode.Range(i, 0, i, line.length);
 				const diagnostic = new vscode.Diagnostic(
 					range,
@@ -157,7 +157,7 @@ const sortLines = (lines: string[]) => {
 
 const startsWith = (line: string, prefixes: string[]) => {
 	for (const prefix of prefixes) {
-		const lineWithoutSpaces = line.replace(/^\s+/g, '');
+		const lineWithoutSpaces = line.trim();
 		if (lineWithoutSpaces.startsWith(prefix) || line.length === 0) {
 			return true;
 		}
@@ -254,18 +254,17 @@ const isSelector = (line: string) => {
 		"var",
 		"video",
 	];
-	const pseudoSelectors = [".", "&", "#", ":"];
+	const pseudoSelectors = [".", "&", "#", ":", "*"];
 	const selectorsPrefixes = [...htmlTagSelectors, ...pseudoSelectors];
 
-	const lineWithoutSpaces = line.replace(/^\s+/g, '');
 	let isSelector = false;
-	if (startsWith(lineWithoutSpaces, pseudoSelectors)) {
+	if (startsWith(line, pseudoSelectors)) {
 		isSelector = true;
 	}
-	else if (startsWith(lineWithoutSpaces, selectorsPrefixes)) {
+	else if (startsWith(line, selectorsPrefixes)) {
 		for (const selector of selectorsPrefixes) {
-			const lineWitoutSelector = lineWithoutSpaces.replace(selector, '');
-			if (startsWith(lineWitoutSelector, pseudoSelectors)) {
+			const lineWitoutSelector = line.trim().replace(selector, '');
+			if (lineWitoutSelector.charAt(0) === ' ' || startsWith(lineWitoutSelector, [...pseudoSelectors])) {
 				isSelector = true;
 				break;
 			}
