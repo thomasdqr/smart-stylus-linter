@@ -180,6 +180,7 @@ const isSelector = (line: string) => {
 		"button",
 		"canvas",
 		"caption",
+		"center",
 		"cite",
 		"code",
 		"col",
@@ -240,6 +241,7 @@ const isSelector = (line: string) => {
 		"sub",
 		"summary",
 		"sup",
+		"svg",
 		"table",
 		"tbody",
 		"td",
@@ -254,11 +256,15 @@ const isSelector = (line: string) => {
 		"var",
 		"video",
 	];
-	const pseudoSelectors = [".", "&", "#", ":", "*"];
+	const pseudoSelectors = [".", "&", "#", ":", "*", ",", "@", ">"];
 	const selectorsPrefixes = [...htmlTagSelectors, ...pseudoSelectors];
+	const percentPattern = /^(100|[0-9]{1,2})%$/;
 
 	let isSelector = false;
 	if (startsWith(line, pseudoSelectors)) {
+		isSelector = true;
+	}
+	else if (percentPattern.test(line.trim())) {
 		isSelector = true;
 	}
 	else if (startsWith(line, selectorsPrefixes)) {

@@ -2,7 +2,7 @@
   "name": "smart-stylus-linter",
   "displayName": "Smart Stylus Linter",
   "description": "Allow to auto sort stylus properties",
-  "version": "1.1.6",
+  "version": "1.2.0",
   "publisher": "thomasdqr",
   "icon": "icon.png",
   "engines": {
